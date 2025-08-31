@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Grid Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Random Grid Generator</h1>
+            <p>Generate random grids for pathfinding and visualization purposes</p>
+        </header>
+        
+        <div class="controls">
+            <div class="input-group">
+                <label for="rows">Rows:</label>
+                <input type="number" id="rows" min="5" max="50" value="10" />
+            </div>
+            <div class="input-group">
+                <label for="cols">Columns:</label>
+                <input type="number" id="cols" min="5" max="50" value="10" />
+            </div>
+            <button id="generateBtn" onclick="generateGrid()">Generate Grid</button>
+        </div>
+
+        <div class="legend">
+            <h3>Legend:</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <span class="cell start">S</span>
+                    <span>Start</span>
+                </div>
+                <div class="legend-item">
+                    <span class="cell end">s</span>
+                    <span>End</span>
+                </div>
+                <div class="legend-item">
+                    <span class="cell obstacle">O</span>
+                    <span>Obstacle</span>
+                </div>
+                <div class="legend-item">
+                    <span class="cell free">.</span>
+                    <span>Free Space</span>
+                </div>
+                <div class="legend-item">
+                    <span class="cell path">•</span>
+                    <span>Path</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="result">
+            <div id="pathResult" class="path-result"></div>
+        </div>
+
+        <div class="grid-container">
+            <div id="grid" class="grid"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
