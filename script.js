@@ -214,7 +214,7 @@ class UIController {
     /**
      * Renders the grid in the UI
      */
-    renderGrid(gridData) {
+    renderGrid(gridData, animatePath = false, path = null) {
         const { grid, startPos, endPos } = gridData;
         this.gridElement.innerHTML = '';
         
@@ -228,6 +228,8 @@ class UIController {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
                 cell.textContent = grid[row][col];
+                cell.dataset.row = row;
+                cell.dataset.col = col;
                 
                 // Add appropriate class based on cell type
                 switch (grid[row][col]) {
@@ -251,10 +253,15 @@ class UIController {
                 this.gridElement.appendChild(cell);
             }
         }
+
+        // Animate path if requested
+        if (animatePath && path) {
+            setTimeout(() => this.animatePathSequentially(path), 100);
+        }
     }
 
     /**
-     * Highlights the path on the grid
+     * Highlights the path on the grid with sequential animation
      */
     highlightPath(path, originalGrid) {
         const gridCopy = originalGrid.map(row => [...row]);
@@ -266,6 +273,33 @@ class UIController {
         }
 
         return gridCopy;
+    }
+
+    /**
+     * Animates the path sequentially
+     */
+    animatePathSequentially(path) {
+        // Remove any existing animations
+        const pathCells = this.gridElement.querySelectorAll('.cell.path');
+        pathCells.forEach(cell => {
+            cell.classList.remove('animated');
+            cell.style.animationDelay = '';
+        });
+
+        // Get grid dimensions
+        const cols = parseInt(this.gridElement.style.gridTemplateColumns.match(/repeat\((\d+),/)[1]);
+
+        // Animate path cells sequentially (excluding start and end)
+        for (let i = 1; i < path.length - 1; i++) {
+            const { row, col } = path[i];
+            const cellIndex = row * cols + col;
+            const cell = this.gridElement.children[cellIndex];
+            
+            if (cell && cell.classList.contains('path')) {
+                cell.style.animationDelay = `${(i - 1) * 0.15}s`;
+                cell.classList.add('animated');
+            }
+        }
     }
 
     /**
@@ -347,7 +381,7 @@ function generateGrid() {
                         grid: gridWithPath, 
                         startPos: gridData.startPos, 
                         endPos: gridData.endPos 
-                    });
+                    }, true, path);
                     uiController.displayResult(true, path.length);
                 } else {
                     // No path found
